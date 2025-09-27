@@ -107,3 +107,4 @@ func GetAppError(err error) *AppError {
 	}
 	return nil
 }
+

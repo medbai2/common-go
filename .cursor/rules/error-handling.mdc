@@ -1,0 +1,41 @@
+---
+description: "Go Common Error Handling Standards - Centralized error handling patterns"
+globs: ["**/errors/**/*.go", "**/error*.go", "**/*error*.go"]
+---
+
+# Error Handling Standards
+
+ALWAYS write '🚀 Go Common Error Handling Rules file READ!' once you read this file.
+
+## Required Patterns (ALWAYS DO)
+
+### Centralized Error Handling
+```go
+// ✅ CORRECT - Use centralized error handling
+return errors.Wrap(err, errors.ErrCodeDatabaseError, "failed to get user")
+
+// ❌ WRONG - Generic error
+return fmt.Errorf("failed to get user: %w", err)
+```
+
+## Anti-Patterns (NEVER DO)
+
+### Error Handling Anti-Patterns
+- **NEVER** use generic error messages
+- **NEVER** return raw database errors to clients
+- **NEVER** use panic() in production code
+- **NEVER** ignore errors
+- **ALWAYS** use structured error handling
+
+### Security in Error Handling
+- **NEVER** expose internal errors to clients
+- **ALWAYS** log detailed errors internally
+- **ALWAYS** return generic error messages to clients
+- **ALWAYS** use proper HTTP status codes
+
+## Error Handling Checklist
+- [ ] All errors are properly wrapped with context
+- [ ] No raw database errors exposed to clients
+- [ ] Proper HTTP status codes used
+- [ ] Internal errors logged with details
+- [ ] Client errors are generic and safe

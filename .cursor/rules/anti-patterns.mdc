@@ -1,0 +1,27 @@
+# Anti-Patterns (NEVER DO)
+
+ALWAYS write '>> Go Common Anti-Patterns Rules file READ!' once you read this file.
+
+## Code Duplication
+- **NEVER** duplicate error handling logic
+- **NEVER** duplicate validation logic
+- **NEVER** duplicate logging logic
+- **NEVER** duplicate response formatting
+- **ALWAYS** use centralized components
+
+## Layer Violations
+- **NEVER** put database queries in services
+- **NEVER** put business logic in handlers
+- **NEVER** put HTTP logic in repositories
+- **NEVER** import handlers from services
+- **NEVER** import services from repositories
+
+## Critical Rules (NEVER VIOLATE)
+1. **NEVER** mix layers - Each layer has a single responsibility
+2. **NEVER** duplicate code - Use centralized components
+3. **NEVER** ignore errors - Always handle errors properly
+4. **NEVER** use global state - Use dependency injection
+5. **NEVER** expose internal details - Use proper abstraction
+6. **NEVER** skip validation - Always validate inputs
+7. **NEVER** skip logging - Always log important events
+8. **NEVER** skip tests - Always write tests for new code

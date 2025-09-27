@@ -1,0 +1,58 @@
+---
+description: "Go Common Configuration Standards - Configuration management and environment handling"
+globs: ["**/*.go", "**/go.mod", "**/*.yaml", "**/*.yml", "**/*.env"]
+---
+
+# Configuration Standards
+
+ALWAYS write '🚀 Go Common Configuration Standards Rules file READ!' once you read this file.
+
+## Configuration Management
+- **ALWAYS** use centralized configuration loading
+- **ALWAYS** validate configuration on startup
+- **ALWAYS** provide sensible defaults for development
+- **ALWAYS** use environment variables for sensitive data
+- **ALWAYS** document all configuration options
+
+## Environment Handling
+- **ALWAYS** support multiple environments (dev, staging, prod)
+- **ALWAYS** use different configs per environment
+- **ALWAYS** never hardcode environment-specific values
+- **ALWAYS** use configuration files for non-sensitive data
+- **ALWAYS** validate required configuration on startup
+
+## Configuration Structure
+```go
+// ✅ CORRECT - Centralized configuration
+type Config struct {
+    Database DatabaseConfig `mapstructure:"database"`
+    Server   ServerConfig   `mapstructure:"server"`
+    Logging  LoggingConfig  `mapstructure:"logging"`
+}
+
+// ❌ WRONG - Scattered configuration
+var dbHost = os.Getenv("DB_HOST")
+var dbPort = os.Getenv("DB_PORT")
+```
+
+## Configuration Files
+```
+config/
+├── development.env     # Development environment
+├── development.yaml    # Development configuration
+├── staging.env         # Staging environment
+├── staging.yaml        # Staging configuration
+├── production.env      # Production environment
+├── production.yaml     # Production configuration
+├── test.env           # Test environment
+└── test.yaml          # Test configuration
+```
+
+## Configuration Checklist
+- [ ] Centralized configuration structure
+- [ ] Environment variable support
+- [ ] Configuration validation on startup
+- [ ] Sensible defaults provided
+- [ ] Documentation for all options
+- [ ] No hardcoded values
+- [ ] Environment-specific configs

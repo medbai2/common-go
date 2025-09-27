@@ -37,19 +37,34 @@ func (vs *ValidatorService) ValidateStruct(s interface{}) *ValidationResult {
 		}
 	}
 
-	// Convert validator errors to our ValidationError format
-	var validationErrors []ValidationError
-	for _, err := range err.(validator.ValidationErrors) {
-		validationErrors = append(validationErrors, ValidationError{
-			Field:   err.Field(),
-			Message: getValidationMessage(err),
-			Code:    err.Tag(),
-		})
+	// Handle validation errors
+	if validationErrors, ok := err.(validator.ValidationErrors); ok {
+		// Convert validator errors to our ValidationError format
+		var errors []ValidationError
+		for _, err := range validationErrors {
+			errors = append(errors, ValidationError{
+				Field:   err.Field(),
+				Message: getValidationMessage(err),
+				Code:    err.Tag(),
+			})
+		}
+
+		return &ValidationResult{
+			IsValid: false,
+			Errors:  errors,
+		}
 	}
 
+	// Handle other types of errors (like InvalidValidationError)
 	return &ValidationResult{
 		IsValid: false,
-		Errors:  validationErrors,
+		Errors: []ValidationError{
+			{
+				Field:   "field",
+				Message: "validation failed",
+				Code:    "VALIDATION_ERROR",
+			},
+		},
 	}
 }
 

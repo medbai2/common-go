@@ -102,3 +102,4 @@ func (s *Sanitizer) SanitizeHTML(input string) string {
 
 	return sanitized
 }
+

@@ -1,0 +1,47 @@
+---
+description: "Go Common Testing Standards - Testing requirements and patterns"
+globs: ["**/*_test.go", "**/test/**/*.go", "**/testing/**/*.go"]
+---
+
+# Testing Standards
+
+ALWAYS write '🚀 Go Common Testing Standards Rules file READ!' once you read this file.
+
+## Testability Requirements
+- **ALWAYS** use interfaces for dependencies
+- **ALWAYS** make functions pure when possible
+- **ALWAYS** avoid global state
+- **ALWAYS** use dependency injection
+- **ALWAYS** write testable code
+
+## Test Structure
+- **ALWAYS** test each layer independently
+- **ALWAYS** mock external dependencies
+- **ALWAYS** test error scenarios
+- **ALWAYS** test validation rules
+- **ALWAYS** include integration tests
+
+## Test Types Required
+- **Unit Tests**: Test individual functions and methods
+- **Integration Tests**: Test component interactions
+- **Smoke Tests**: Test critical user journeys
+- **Contract Tests**: Test API contracts
+- **Performance Tests**: Test response times and throughput
+
+## Test Coverage Requirements
+- **100%** coverage for critical business logic
+- **90%** coverage for all service layer functions
+- **80%** coverage for repository layer functions
+- **70%** coverage for handler layer functions
+
+## Testing Checklist
+- [ ] Interfaces defined for all dependencies
+- [ ] Functions are pure when possible
+- [ ] No global state used
+- [ ] Dependency injection implemented
+- [ ] Each layer tested independently
+- [ ] External dependencies mocked
+- [ ] Error scenarios tested
+- [ ] Integration tests included
+- [ ] Smoke tests implemented
+- [ ] Performance tests added

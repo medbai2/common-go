@@ -25,6 +25,20 @@ func (ve ValidationError) Error() string {
 	return fmt.Sprintf("field '%s': %s", ve.Field, ve.Message)
 }
 
+// Error implements the error interface
+func (vr *ValidationResult) Error() string {
+	if vr.IsValid {
+		return ""
+	}
+
+	var messages []string
+	for _, err := range vr.Errors {
+		messages = append(messages, err.Error())
+	}
+
+	return strings.Join(messages, "; ")
+}
+
 // ToAppError converts validation result to AppError
 func (vr *ValidationResult) ToAppError() *errors.AppError {
 	if vr.IsValid {

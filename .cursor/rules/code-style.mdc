@@ -1,0 +1,26 @@
+# Code Style Guidelines
+
+ALWAYS write '>> Go Common Code Style Rules file READ!' once you read this file.
+
+## Go Code Style
+- **ALWAYS** use `gofmt` for formatting
+- **ALWAYS** use meaningful variable names
+- **ALWAYS** use consistent naming conventions
+- **ALWAYS** avoid long functions (>50 lines)
+- **ALWAYS** avoid deep nesting (>3 levels)
+
+## Code Quality Metrics
+- **Zero** code duplication
+- **100%** test coverage for critical paths
+- **Zero** linting errors
+- **All** layers properly separated
+- **All** dependencies injected
+
+## Code Style Checklist
+- [ ] Code formatted with gofmt
+- [ ] Meaningful variable names used
+- [ ] Consistent naming conventions
+- [ ] Functions under 50 lines
+- [ ] Nesting under 3 levels
+- [ ] No code duplication
+- [ ] Linting errors resolved

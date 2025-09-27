@@ -1,0 +1,30 @@
+---
+description: "Go Common Response Handling Standards - Response formatting and utilities"
+globs: ["**/*.go", "**/go.mod"]
+---
+
+# Response Handling Standards
+
+ALWAYS write '🚀 Go Common Response Handling Rules file READ!' once you read this file.
+
+## Response Utilities
+```go
+// ✅ CORRECT - Use response utilities
+response.Success(c, data)
+response.Error(c, err)
+
+// ❌ WRONG - Manual JSON responses
+c.JSON(http.StatusOK, gin.H{"data": data})
+```
+
+## Response Requirements
+- **ALWAYS** use centralized response utilities
+- **ALWAYS** maintain consistent response format
+- **ALWAYS** use proper HTTP status codes
+- **ALWAYS** handle errors consistently
+
+## Response Checklist
+- [ ] Response utilities used
+- [ ] Consistent response format
+- [ ] Proper HTTP status codes
+- [ ] Error responses handled consistently

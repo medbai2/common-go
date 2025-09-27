@@ -1,0 +1,53 @@
+---
+description: "Go Common Monitoring Standards - Health checks and observability"
+globs: ["**/*.go", "**/go.mod"]
+---
+
+# Monitoring Standards
+
+ALWAYS write '🚀 Go Common Monitoring Standards Rules file READ!' once you read this file.
+
+## Health Checks
+- **ALWAYS** implement comprehensive health check endpoints
+- **ALWAYS** check all external dependencies
+- **ALWAYS** return proper HTTP status codes
+- **ALWAYS** include response time metrics
+- **ALWAYS** implement readiness and liveness probes
+
+## Logging for Monitoring
+- **ALWAYS** log all important business events
+- **ALWAYS** include correlation IDs in logs
+- **ALWAYS** log performance metrics
+- **ALWAYS** log error rates and patterns
+- **ALWAYS** implement structured logging
+
+## Metrics and Observability
+- **ALWAYS** track key business metrics
+- **ALWAYS** monitor system performance
+- **ALWAYS** implement proper alerting
+- **ALWAYS** track error rates and response times
+- **ALWAYS** implement distributed tracing
+
+## Health Check Implementation
+```go
+// ✅ CORRECT - Comprehensive health check
+func HealthCheck(c *gin.Context) {
+    health := map[string]interface{}{
+        "status": "healthy",
+        "timestamp": time.Now(),
+        "version": version,
+        "dependencies": checkDependencies(),
+    }
+    response.Success(c, health)
+}
+```
+
+## Monitoring Checklist
+- [ ] Health check endpoints implemented
+- [ ] All dependencies checked
+- [ ] Proper status codes returned
+- [ ] Performance metrics tracked
+- [ ] Error rates monitored
+- [ ] Correlation IDs implemented
+- [ ] Alerting configured
+- [ ] Distributed tracing ready

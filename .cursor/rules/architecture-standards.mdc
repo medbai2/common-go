@@ -1,0 +1,81 @@
+---
+description: "Go Common Architecture Standards - Layer separation, dependency flow, and interface design"
+globs: ["**/internal/**/*.go", "**/handlers/**/*.go", "**/services/**/*.go", "**/repositories/**/*.go"]
+---
+
+# Architecture Standards
+
+ALWAYS write '🚀 Go Common Architecture Standards Rules file READ!' once you read this file.
+
+## Layer Separation (CRITICAL)
+```
+API Gateway Layer → API Layer (handlers/) → Business Layer (services/) → Repository Layer (repositories/) → Database Layer (database/)
+```
+
+**API Gateway Responsibilities:**
+- Authentication & Authorization
+- Rate Limiting & Throttling
+- Request Routing & Load Balancing
+- Cross-cutting Security Concerns
+- CORS & Security Headers
+
+**Application Layer Responsibilities:**
+- Business Logic Implementation
+- Data Validation & Sanitization
+- Database Operations
+- Error Handling & Logging
+
+## Directory Structure
+```
+hello/
+├── engine/              # Go microservice
+│   ├── internal/
+│   │   ├── config/      # Configuration management
+│   │   ├── container/   # Dependency injection
+│   │   ├── database/    # Database connection
+│   │   ├── errors/      # Error handling
+│   │   ├── handlers/    # HTTP handlers
+│   │   ├── logger/      # Logging
+│   │   ├── middleware/  # HTTP middleware
+│   │   ├── migrate/     # Database migrations
+│   │   ├── models/      # Data models
+│   │   ├── repositories/# Data access
+│   │   ├── services/    # Business logic
+│   │   └── validation/  # Input validation
+│   └── migrations/      # Database migrations
+├── ui/                  # React frontend
+│   ├── src/
+│   │   ├── components/  # React components
+│   │   ├── api/         # API client
+│   │   ├── utils/       # Utility functions
+│   │   └── config.ts    # Configuration
+│   └── config/          # Environment configs
+└── api-gateway/         # API gateway
+    └── internal/
+        ├── auth/        # Authentication
+        ├── config/      # Configuration
+        ├── limiter/     # Rate limiting
+        ├── middleware/  # Middleware
+        ├── proxy/       # Request proxying
+        └── redis/       # Redis client
+```
+
+## Dependency Flow
+- **ALWAYS** inject dependencies from outer layers to inner layers
+- **NEVER** import from inner layers in outer layers
+- **USE** interfaces for all dependencies
+- **IMPLEMENT** dependency injection container
+
+## Interface Design
+- **ALWAYS** define interfaces for all external dependencies
+- **ALWAYS** keep interfaces small and focused (Single Responsibility)
+- **ALWAYS** use interfaces for testability
+- **ALWAYS** define interfaces at the boundary of your package
+- **ALWAYS** use meaningful interface names
+
+## Dependency Injection
+- **ALWAYS** use constructor injection
+- **ALWAYS** resolve dependencies at application startup
+- **ALWAYS** avoid service locator pattern
+- **ALWAYS** use a container for dependency management
+- **ALWAYS** make dependencies explicit in function signatures

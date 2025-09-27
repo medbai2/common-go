@@ -1,11 +1,11 @@
 package middleware
 
 import (
-	"time"
+	"fmt"
+	"net/http"
 
 	"go-common/logger"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -40,12 +40,27 @@ func Logger() gin.HandlerFunc {
 
 // CORS returns a gin.HandlerFunc for CORS configuration
 func CORS(corsMaxAge int) gin.HandlerFunc {
-	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
-	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
-	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization", "X-Requested-With"}
-	config.AllowCredentials = true
-	config.MaxAge = time.Duration(corsMaxAge) * time.Hour
-
-	return cors.New(config)
+	return func(c *gin.Context) {
+		origin := c.Request.Header.Get("Origin")
+		
+		// Set CORS headers
+		if origin != "" {
+			c.Header("Access-Control-Allow-Origin", origin)
+		} else {
+			c.Header("Access-Control-Allow-Origin", "*")
+		}
+		
+		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		c.Header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization")
+		c.Header("Access-Control-Max-Age", fmt.Sprintf("%d", corsMaxAge))
+		
+		// Handle preflight requests
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusNoContent)
+			return
+		}
+		
+		c.Next()
+	}
 }
+

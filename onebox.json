@@ -1,0 +1,11 @@
+{
+  "roles": {
+    "go-common": {
+      "name": "Go Common Module",
+      "path": ".",
+      "commands": {
+        "test": "go test -v -race -timeout 300s ./..."
+      }
+    }
+  }
+}

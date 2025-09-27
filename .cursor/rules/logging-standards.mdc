@@ -1,0 +1,40 @@
+---
+description: "Go Common Logging Standards - Structured logging requirements"
+globs: ["**/*.go", "**/go.mod"]
+---
+
+# Logging Standards
+
+ALWAYS write '🚀 Go Common Logging Standards Rules file READ!' once you read this file.
+
+## Structured Logging
+```go
+// ✅ CORRECT - Structured logging with context
+logger.Info("User created successfully", map[string]interface{}{
+    "userId": user.ID,
+    "name": user.Name,
+})
+
+// ❌ WRONG - Simple string logging
+log.Printf("User created: %s", user.Name)
+```
+
+## Logging Requirements
+- **ALWAYS** use JSON format
+- **ALWAYS** include request ID
+- **ALWAYS** include relevant context
+- **ALWAYS** use appropriate log levels
+- **ALWAYS** avoid logging sensitive data
+
+## Log Levels
+- **DEBUG**: Detailed information for debugging
+- **INFO**: General information about application flow
+- **WARN**: Warning messages for potential issues
+- **ERROR**: Error messages for failures
+
+## Logging Checklist
+- [ ] Structured logging with JSON format
+- [ ] Request ID included in all logs
+- [ ] Appropriate log level used
+- [ ] No sensitive data logged
+- [ ] Context information included

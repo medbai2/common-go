@@ -1,0 +1,38 @@
+---
+description: "Go Common Validation Standards - Input validation and sanitization"
+globs: ["**/validation/**/*.go", "**/validate*.go", "**/*validate*.go"]
+---
+
+# Validation Standards
+
+ALWAYS write '🚀 Go Common Validation Standards Rules file READ!' once you read this file.
+
+## Rule-Based Validation
+```go
+// ✅ CORRECT - Rule-based validation
+validator := validation.NewValidator()
+validator.AddRule("name", req.Name, 
+    validation.Required(),
+    validation.MinLength(1),
+    validation.MaxLength(100),
+)
+
+// ❌ WRONG - Manual validation
+if req.Name == "" {
+    return errors.New("name is required")
+}
+```
+
+## Input Validation Requirements
+- **ALWAYS** validate all inputs
+- **ALWAYS** sanitize user data
+- **ALWAYS** use length limits
+- **ALWAYS** prevent SQL injection
+- **ALWAYS** prevent XSS attacks
+
+## Validation Checklist
+- [ ] All inputs validated
+- [ ] User data sanitized
+- [ ] Length limits enforced
+- [ ] SQL injection prevented
+- [ ] XSS attacks prevented

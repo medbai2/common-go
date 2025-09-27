@@ -1,0 +1,75 @@
+---
+description: "Go Common Error Codes Separation Standards - Error code management and separation"
+globs: ["**/*.go", "**/go.mod"]
+---
+
+# Error Codes Separation Standards
+
+ALWAYS write '🚀 Go Common Error Codes Separation Rules file READ!' once you read this file.
+
+## Critical Rule: NO HARDCODED ERROR STRINGS
+- **NEVER** use hardcoded error strings in business logic
+- **ALWAYS** define error codes as constants
+- **ALWAYS** centralize error messages
+- **ALWAYS** use typed error codes
+
+## Error Code Architecture
+```go
+// ✅ CORRECT - Centralized error codes
+const (
+    ErrCodeDatabaseError ErrorCode = "DATABASE_ERROR"
+    ErrCodeInvalidInput  ErrorCode = "INVALID_INPUT"
+)
+
+// ✅ CORRECT - Using constants
+return errors.Wrap(err, errors.ErrCodeDatabaseError, "failed to get user")
+
+// ❌ WRONG - Hardcoded strings
+return errors.New("DATABASE_ERROR", "failed to get user")
+```
+
+## Error Message Management
+- **Centralized Messages**: All error messages in constants or config
+- **Internationalization Ready**: Messages should be externalized
+- **Consistent Format**: Use consistent message patterns
+- **Contextual Information**: Include relevant context in messages
+
+## File Organization
+```
+internal/
+├── errors/
+│   ├── codes.go        # Error code constants
+│   ├── messages.go     # Error message constants
+│   └── errors.go       # Error handling logic
+```
+
+## Anti-Patterns (NEVER DO)
+```go
+// ❌ WRONG - Hardcoded error strings
+return fmt.Errorf("user not found")
+
+// ❌ WRONG - Hardcoded error codes
+return errors.New("USER_NOT_FOUND", "user not found")
+
+// ❌ WRONG - Inline error messages
+c.JSON(400, gin.H{"error": "Invalid input"})
+```
+
+## Correct Patterns (ALWAYS DO)
+```go
+// ✅ CORRECT - Using constants
+return errors.NewNotFound("user")
+
+// ✅ CORRECT - Centralized error handling
+response.Error(c, err)
+
+// ✅ CORRECT - Typed error codes
+return errors.Wrap(err, errors.ErrCodeDatabaseError, "failed to get user")
+```
+
+## Error Codes Checklist
+- [ ] All error codes defined as constants
+- [ ] No hardcoded error strings in business logic
+- [ ] Error messages centralized
+- [ ] Consistent error code naming
+- [ ] Proper error code typing
