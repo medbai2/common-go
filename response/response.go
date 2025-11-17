@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"go-common/errors"
+	"github.com/medbai2/common-go/errors"
 
 	"github.com/gin-gonic/gin"
 )

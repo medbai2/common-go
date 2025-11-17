@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"go-common/errors"
+	"github.com/medbai2/common-go/errors"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -84,4 +84,3 @@ func HealthCheck(db *gorm.DB) error {
 	}
 	return nil
 }
-

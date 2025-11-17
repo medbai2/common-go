@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"go-common/testutils"
+	"github.com/medbai2/common-go/testutils"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"

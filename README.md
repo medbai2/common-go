@@ -1,8 +1,8 @@
-# go-common
+# common-go
 
-[![CI](https://github.com/medbai2/medbai2/workflows/go-common-ci/badge.svg)](https://github.com/medbai2/medbai2/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/medbai2/go-common)](https://goreportcard.com/report/github.com/medbai2/go-common)
-[![Coverage](https://codecov.io/gh/medbai2/medbai2/branch/main/graph/badge.svg?flag=go-common)](https://codecov.io/gh/medbai2/medbai2)
+[![CI](https://github.com/medbai2/medbai2/workflows/common-go-ci/badge.svg)](https://github.com/medbai2/medbai2/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/medbai2/common-go)](https://goreportcard.com/report/github.com/medbai2/common-go)
+[![Coverage](https://codecov.io/gh/medbai2/medbai2/branch/main/graph/badge.svg?flag=common-go)](https://codecov.io/gh/medbai2/medbai2)
 
 **Enterprise-grade shared Go libraries for microservices architecture**
 
@@ -27,7 +27,7 @@ This library follows the **Hello Application** template architecture standards:
 Enterprise-grade PostgreSQL connection management with GORM integration.
 
 ```go
-import "go-common/database"
+import "common-go/database"
 
 // Configure database connection
 cfg := database.Config{
@@ -64,7 +64,7 @@ err = database.HealthCheck(db)
 Structured error handling system with HTTP status code mapping and consistent error responses.
 
 ```go
-import "go-common/errors"
+import "common-go/errors"
 
 // Create structured errors
 appErr := errors.NewNotFound("user")
@@ -101,7 +101,7 @@ if errors.IsAppError(err) {
 High-performance structured logging with Zap, context support, and multiple output formats.
 
 ```go
-import "go-common/logger"
+import "common-go/logger"
 
 // Create logger from environment
 logger := logger.NewFromEnv("my-service")
@@ -133,7 +133,7 @@ contextLogger.Error("Operation failed", err)
 Gin middleware for cross-cutting concerns.
 
 ```go
-import "go-common/middleware"
+import "common-go/middleware"
 
 // Request logging
 router.Use(middleware.Logger())
@@ -154,7 +154,7 @@ router.Use(middleware.CORS(12)) // 12 hours max age
 Consistent API response formatting for REST endpoints.
 
 ```go
-import "go-common/response"
+import "common-go/response"
 
 // Success responses
 response.Success(c, userData)
@@ -186,7 +186,7 @@ response.Health(c, "healthy", healthChecks)
 Enterprise validation using go-playground/validator with HTML sanitization.
 
 ```go
-import "go-common/validation"
+import "common-go/validation"
 
 // Struct validation
 type User struct {
@@ -263,15 +263,15 @@ open coverage.html
 
 ```bash
 # In your Go project
-go get go-common
+go get common-go
 
 # Import packages as needed
 import (
-    "go-common/database"
-    "go-common/errors"
-    "go-common/logger"  
-    "go-common/response"
-    "go-common/validation"
+    "common-go/database"
+    "common-go/errors"
+    "common-go/logger"  
+    "common-go/response"
+    "common-go/validation"
 )
 ```
 
@@ -296,11 +296,11 @@ export LOG_FORMAT=json
 package main
 
 import (
-    "go-common/database"
-    "go-common/errors"
-    "go-common/logger"
-    "go-common/response"
-    "go-common/validation"
+    "common-go/database"
+    "common-go/errors"
+    "common-go/logger"
+    "common-go/response"
+    "common-go/validation"
     
     "github.com/gin-gonic/gin"
 )

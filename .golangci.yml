@@ -18,7 +18,7 @@ linters-settings:
     statements: 40
 
   gci:
-    local-prefixes: go-common
+    local-prefixes: common-go
 
   gocognit:
     min-complexity: 10
@@ -44,7 +44,7 @@ linters-settings:
     capital: false
 
   goimports:
-    local-prefixes: go-common
+    local-prefixes: common-go
 
   gomnd:
     settings:

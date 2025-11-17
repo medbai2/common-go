@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"go-common/testutils"
+	"github.com/medbai2/common-go/testutils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
@@ -320,7 +320,7 @@ func TestMiddlewareErrorHandling(t *testing.T) {
 	hts2.Router.GET("/test", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "success"})
 	})
-	
+
 	req2 := hts2.SetupRequest(http.MethodGet, "/test")
 	req2.Header.Set("X-Force-Error", "true")
 	hts2.ExecuteRequest(req2)
@@ -336,14 +336,14 @@ func TestConcurrentMiddlewareExecution(t *testing.T) {
 		go func() {
 			// Create a new test suite for each goroutine to avoid concurrent access
 			hts := testutils.NewHTTPTestSuite(t)
-			
+
 			// Add middleware
 			hts.Router.Use(Logger())
 			hts.Router.Use(CORS(86400))
 			hts.Router.GET("/test", func(c *gin.Context) {
 				c.JSON(http.StatusOK, gin.H{"message": "success"})
 			})
-			
+
 			req := hts.SetupRequest(http.MethodGet, "/test")
 			req.Header.Set("Origin", "https://example.com")
 			hts.ExecuteRequest(req)

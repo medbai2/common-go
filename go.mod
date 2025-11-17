@@ -1,4 +1,4 @@
-module go-common
+module github.com/medbai2/common-go
 
 go 1.21
 

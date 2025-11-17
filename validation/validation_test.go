@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"go-common/errors"
-	"go-common/testutils"
+	"github.com/medbai2/common-go/errors"
+	"github.com/medbai2/common-go/testutils"
 )
 
 // ValidationTestCase represents a validation test case
