@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/medbai2/common-go/errors"
@@ -9,6 +10,14 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+)
+
+// AuthType represents the authentication method
+type AuthType string
+
+const (
+	AuthTypePassword AuthType = "password" // Password-based authentication (Onebox)
+	AuthTypeIAM     AuthType = "iam"       // IAM-based authentication (GCP)
 )
 
 // Config represents database configuration
@@ -19,6 +28,7 @@ type Config struct {
 	Name            string
 	User            string
 	Password        string
+	AuthType        AuthType // Explicit authentication type: "password" or "iam"
 	SSLMode         string
 	SchemaAutoApply bool
 	MaxOpenConns    int
@@ -27,10 +37,47 @@ type Config struct {
 	ConnMaxIdleTime time.Duration
 }
 
+// buildDSN builds the PostgreSQL DSN string
+// Handles both password-based and IAM-based authentication based on AuthType
+func buildDSN(cfg Config) string {
+	password := cfg.Password
+	if cfg.AuthType == AuthTypeIAM {
+		// IAM authentication: explicitly empty password
+		// Cloud SQL Proxy will handle IAM token exchange
+		password = ""
+	}
+	return fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
+		cfg.Host, cfg.Port, cfg.User, password, cfg.Name, cfg.SSLMode)
+}
+
 // New creates a new GORM database connection
+// Supports both password-based (Onebox) and IAM-based (GCP) authentication
 func New(cfg Config) (*gorm.DB, error) {
-	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
-		cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Name, cfg.SSLMode)
+	// Validate AuthType
+	if cfg.AuthType == "" {
+		// Default to password auth if not specified (backward compatibility)
+		cfg.AuthType = AuthTypePassword
+	}
+	if cfg.AuthType != AuthTypePassword && cfg.AuthType != AuthTypeIAM {
+		return nil, errors.Wrap(fmt.Errorf("invalid auth type: %s (must be 'password' or 'iam')", cfg.AuthType), errors.ErrCodeDatabaseError, "invalid authentication configuration")
+	}
+
+	// Validate configuration based on auth type
+	if cfg.AuthType == AuthTypeIAM && cfg.Password != "" {
+		log.Printf("Warning: Password provided but using IAM authentication. Password will be ignored.")
+	}
+	if cfg.AuthType == AuthTypePassword && cfg.Password == "" {
+		return nil, errors.Wrap(fmt.Errorf("password authentication requires a password"), errors.ErrCodeDatabaseError, "invalid authentication configuration")
+	}
+
+	dsn := buildDSN(cfg)
+
+	// Log authentication mode for debugging
+	if cfg.AuthType == AuthTypeIAM {
+		log.Printf("Using IAM authentication for user: %s", cfg.User)
+	} else {
+		log.Printf("Using password authentication for user: %s", cfg.User)
+	}
 
 	// Configure GORM
 	gormConfig := &gorm.Config{
