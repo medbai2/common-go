@@ -51,27 +51,63 @@ func buildDSN(cfg Config) string {
 	log.Printf("buildDSN - Host: %s, Port: %d, User: %s, Name: %s, SSLMode: %s",
 		cfg.Host, cfg.Port, cfg.User, cfg.Name, cfg.SSLMode)
 	
-	// PostgreSQL DSN format: key=value pairs separated by spaces
-	// lib/pq driver requires URL-encoding for special characters in values
-	// lib/pq will decode URL-encoded values before sending to PostgreSQL
-	// This means: URL-encode in DSN → lib/pq decodes → PostgreSQL gets actual username (works for IAM auth)
+	// PostgreSQL DSN format: Use postgres:// URL format for better special character handling
+	// The postgres:// URL format properly handles special characters in username/password
+	// Format: postgres://[user[:password]@][host][:port][/database][?parameters]
 	userName := cfg.User
 	dbName := cfg.Name
 	
-	// URL-encode special characters in username
-	// lib/pq will decode %40 back to @ before sending to PostgreSQL
-	// This prevents the DSN parser from stopping at @ and losing dbname
+	// URL-encode special characters for postgres:// URL format
+	// The postgres:// parser will decode these before sending to PostgreSQL
 	if strings.Contains(userName, "@") {
 		userName = strings.ReplaceAll(userName, "@", "%40")
-		log.Printf("buildDSN - URL-encoded username: %s", userName)
+	}
+	if strings.Contains(userName, ":") {
+		userName = strings.ReplaceAll(userName, ":", "%3A")
+	}
+	if strings.Contains(userName, "/") {
+		userName = strings.ReplaceAll(userName, "/", "%2F")
+	}
+	if strings.Contains(userName, "?") {
+		userName = strings.ReplaceAll(userName, "?", "%3F")
+	}
+	if strings.Contains(userName, "#") {
+		userName = strings.ReplaceAll(userName, "#", "%23")
+	}
+	if strings.Contains(userName, "[") {
+		userName = strings.ReplaceAll(userName, "[", "%5B")
+	}
+	if strings.Contains(userName, "]") {
+		userName = strings.ReplaceAll(userName, "]", "%5D")
 	}
 	if strings.Contains(userName, " ") {
 		userName = strings.ReplaceAll(userName, " ", "%20")
 	}
 	
-	// Build DSN
-	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
-		cfg.Host, cfg.Port, userName, password, dbName, cfg.SSLMode)
+	// URL-encode database name if needed
+	if strings.Contains(dbName, "?") {
+		dbName = strings.ReplaceAll(dbName, "?", "%3F")
+	}
+	if strings.Contains(dbName, "#") {
+		dbName = strings.ReplaceAll(dbName, "#", "%23")
+	}
+	
+	// Build postgres:// URL format DSN
+	// For IAM auth, password is empty, so format is: postgres://user@host:port/db?sslmode=...
+	if password == "" {
+		dsn = fmt.Sprintf("postgres://%s@%s:%d/%s?sslmode=%s",
+			userName, cfg.Host, cfg.Port, dbName, cfg.SSLMode)
+	} else {
+		// URL-encode password
+		encodedPassword := password
+		for _, char := range []string{"@", ":", "/", "?", "#", "[", "]"} {
+			encodedPassword = strings.ReplaceAll(encodedPassword, char, fmt.Sprintf("%%%02X", char[0]))
+		}
+		dsn = fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s",
+			userName, encodedPassword, cfg.Host, cfg.Port, dbName, cfg.SSLMode)
+	}
+	
+	log.Printf("buildDSN - URL-encoded username: %s", userName)
 	
 	log.Printf("buildDSN - Generated DSN: %s", dsn)
 	log.Printf("buildDSN - dbname in DSN: '%s' (length: %d)", dbName, len(dbName))
