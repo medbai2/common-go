@@ -46,8 +46,13 @@ func buildDSN(cfg Config) string {
 		// Cloud SQL Proxy will handle IAM token exchange
 		password = ""
 	}
-	return fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
+	// Debug: Log the config values being used
+	log.Printf("buildDSN - Host: %s, Port: %d, User: %s, Name: %s, SSLMode: %s",
+		cfg.Host, cfg.Port, cfg.User, cfg.Name, cfg.SSLMode)
+	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
 		cfg.Host, cfg.Port, cfg.User, password, cfg.Name, cfg.SSLMode)
+	log.Printf("buildDSN - Generated DSN: %s", dsn)
+	return dsn
 }
 
 // New creates a new GORM database connection
