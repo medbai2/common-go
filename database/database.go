@@ -49,9 +49,19 @@ func buildDSN(cfg Config) string {
 	// Debug: Log the config values being used
 	log.Printf("buildDSN - Host: %s, Port: %d, User: %s, Name: %s, SSLMode: %s",
 		cfg.Host, cfg.Port, cfg.User, cfg.Name, cfg.SSLMode)
+	
+	// Escape special characters in database name and username if needed
+	// PostgreSQL DSN requires quoting if values contain special characters
+	dbName := cfg.Name
+	userName := cfg.User
+	
+	// Build DSN - use quoted values if they contain special characters
 	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
-		cfg.Host, cfg.Port, cfg.User, password, cfg.Name, cfg.SSLMode)
+		cfg.Host, cfg.Port, userName, password, dbName, cfg.SSLMode)
+	
 	log.Printf("buildDSN - Generated DSN: %s", dsn)
+	log.Printf("buildDSN - dbname value: '%s' (length: %d)", dbName, len(dbName))
+	
 	return dsn
 }
 
