@@ -94,15 +94,13 @@ func buildDSN(cfg Config) string {
 	
 	// Build postgres:// URL format DSN
 	// For IAM auth, password is empty, so format is: postgres://user@host:port/db?sslmode=...
+	// Use url.QueryEscape for proper URL encoding
 	if password == "" {
 		dsn = fmt.Sprintf("postgres://%s@%s:%d/%s?sslmode=%s",
 			userName, cfg.Host, cfg.Port, dbName, cfg.SSLMode)
 	} else {
-		// URL-encode password
-		encodedPassword := password
-		for _, char := range []string{"@", ":", "/", "?", "#", "[", "]"} {
-			encodedPassword = strings.ReplaceAll(encodedPassword, char, fmt.Sprintf("%%%02X", char[0]))
-		}
+		// URL-encode password using proper URL encoding
+		encodedPassword := url.QueryEscape(password)
 		dsn = fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s",
 			userName, encodedPassword, cfg.Host, cfg.Port, dbName, cfg.SSLMode)
 	}
