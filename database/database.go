@@ -52,20 +52,21 @@ func buildDSN(cfg Config) string {
 		cfg.Host, cfg.Port, cfg.User, cfg.Name, cfg.SSLMode)
 	
 	// PostgreSQL DSN format: key=value pairs separated by spaces
-	// Special characters in values need proper handling
-	// For IAM auth, we must use the actual username (not URL-encoded)
-	// But we need to quote values with special characters to prevent parsing issues
+	// lib/pq driver requires URL-encoding for special characters in values
+	// lib/pq will decode URL-encoded values before sending to PostgreSQL
+	// This means: URL-encode in DSN → lib/pq decodes → PostgreSQL gets actual username (works for IAM auth)
 	userName := cfg.User
 	dbName := cfg.Name
 	
-	// Quote username if it contains special characters (spaces, @, etc.)
+	// URL-encode special characters in username
+	// lib/pq will decode %40 back to @ before sending to PostgreSQL
 	// This prevents the DSN parser from stopping at @ and losing dbname
-	// For IAM auth, PostgreSQL needs the actual username, so we quote it instead of encoding
-	if strings.Contains(userName, "@") || strings.Contains(userName, " ") {
-		// Escape single quotes in username by doubling them
-		escapedUser := strings.ReplaceAll(userName, "'", "''")
-		userName = fmt.Sprintf("'%s'", escapedUser)
-		log.Printf("buildDSN - Quoted username: %s", userName)
+	if strings.Contains(userName, "@") {
+		userName = strings.ReplaceAll(userName, "@", "%40")
+		log.Printf("buildDSN - URL-encoded username: %s", userName)
+	}
+	if strings.Contains(userName, " ") {
+		userName = strings.ReplaceAll(userName, " ", "%20")
 	}
 	
 	// Build DSN
