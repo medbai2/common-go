@@ -51,17 +51,25 @@ func buildDSN(cfg Config) string {
 	log.Printf("buildDSN - Host: %s, Port: %d, User: %s, Name: %s, SSLMode: %s",
 		cfg.Host, cfg.Port, cfg.User, cfg.Name, cfg.SSLMode)
 	
-	// Escape special characters in database name and username if needed
-	// PostgreSQL DSN requires quoting if values contain special characters
-	dbName := cfg.Name
+	// PostgreSQL DSN format: key=value pairs separated by spaces
+	// Special characters in values need proper handling
+	// Username with @ symbol can break parsing - URL-encode it
 	userName := cfg.User
+	dbName := cfg.Name
 	
-	// Build DSN - use quoted values if they contain special characters
+	// URL-encode @ symbol in username (lib/pq driver handles URL encoding)
+	// The @ symbol in username needs to be URL-encoded as %40
+	if strings.Contains(userName, "@") {
+		userName = strings.ReplaceAll(userName, "@", "%40")
+		log.Printf("buildDSN - URL-encoded username: %s", userName)
+	}
+	
+	// Build DSN
 	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
 		cfg.Host, cfg.Port, userName, password, dbName, cfg.SSLMode)
 	
 	log.Printf("buildDSN - Generated DSN: %s", dsn)
-	log.Printf("buildDSN - dbname value: '%s' (length: %d)", dbName, len(dbName))
+	log.Printf("buildDSN - dbname in DSN: '%s' (length: %d)", dbName, len(dbName))
 	
 	return dsn
 }
