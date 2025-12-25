@@ -55,6 +55,19 @@ jobs:
     - name: Verify dependencies
       run: go mod verify
 
+    - name: Validate dependencies against approved list
+      run: |
+        if [ -f ../../scripts/validate-dependencies.sh ]; then
+          bash ../../scripts/validate-dependencies.sh go.mod
+        elif [ -f scripts/validate-dependencies.sh ]; then
+          bash scripts/validate-dependencies.sh go.mod
+        else
+          echo "❌ ERROR: Dependency validation script not found!"
+          echo "Expected: scripts/validate-dependencies.sh or ../../scripts/validate-dependencies.sh"
+          exit 1
+        fi
+      # CI will FAIL if unapproved dependencies are found
+
     - name: Run go mod tidy check
       run: |
         go mod tidy

@@ -1,12 +1,12 @@
 # common-go
 
-[![CI](https://github.com/medbai2/medbai2/workflows/common-go-ci/badge.svg)](https://github.com/medbai2/medbai2/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/medbai2/common-go)](https://goreportcard.com/report/github.com/medbai2/common-go)
-[![Coverage](https://codecov.io/gh/medbai2/medbai2/branch/main/graph/badge.svg?flag=common-go)](https://codecov.io/gh/medbai2/medbai2)
+[![CI](https://github.com/example-org/example-repo/workflows/common-go-ci/badge.svg)](https://github.com/example-org/example-repo/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/example-org/common-go)](https://goreportcard.com/report/github.com/example-org/common-go)
+[![Coverage](https://codecov.io/gh/example-org/example-repo/branch/main/graph/badge.svg?flag=common-go)](https://codecov.io/gh/example-org/example-repo)
 
 **Enterprise-grade shared Go libraries for microservices architecture**
 
-This repository contains battle-tested, production-ready shared components that can be used across multiple Go applications in the MedBAI ecosystem. All packages follow clean architecture principles, implement comprehensive error handling, and include extensive test coverage.
+This repository contains battle-tested, production-ready shared components that can be used across multiple Go applications. All packages follow clean architecture principles, implement comprehensive error handling, and include extensive test coverage.
 
 ## 📋 Architecture Standards
 
@@ -417,7 +417,7 @@ Security features implemented across all packages:
 
 ## 📄 License
 
-This library is part of the MedBAI ecosystem and follows the project's licensing terms.
+This library follows the project's licensing terms.
 
 ---
 

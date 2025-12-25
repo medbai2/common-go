@@ -1,20 +1,4 @@
 {
-  "organization": "medbai2",
-  "branch": "main",
-  "pull_command": "git pull --rebase upstream branch_PH",
-  "push_command": "git push -f",
-  "discovery": {
-    "roots": [".."],
-    "depth": 1,
-    "ignores": [
-      "node_modules",
-      ".git",
-      "__pycache__",
-      "venv",
-      "dist",
-      "build"
-    ]
-  },
   "roles": {
     "common-go": {
       "name": "Go Common Module",
