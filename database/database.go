@@ -109,7 +109,7 @@ func buildDSN(cfg Config) string {
 	
 	log.Printf("buildDSN - URL-encoded username: %s", userName)
 	
-	log.Printf("buildDSN - Generated DSN: %s", dsn)
+	// Security: never log DSNs because they can include secrets (passwords/tokens).
 	log.Printf("buildDSN - dbname in DSN: '%s' (length: %d)", dbName, len(dbName))
 	
 	return dsn
